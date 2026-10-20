@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fff6e9">
+<title>Warm-up Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Quicksand:wght@500;600;700&family=IBM+Plex+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html{background-color:#fff6e9;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background-color:#fff6e9;
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(255,107,107,0.13) 0, transparent 40%),
+      radial-gradient(circle at 88% 12%, rgba(124,92,255,0.13) 0, transparent 40%),
+      radial-gradient(circle at 85% 85%, rgba(6,167,125,0.12) 0, transparent 40%),
+      radial-gradient(circle at 10% 88%, rgba(255,95,162,0.12) 0, transparent 40%);
+    color:#2b2620;
+    font-family:'Quicksand', Arial, sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:36px 18px 60px;
+  }
+  .head{text-align:center; margin-bottom:26px; max-width:420px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#7c5cff;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+  h1{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:42px;
+    margin:0 0 6px;
+    color:#2b2620;
+  }
+  .head p{
+    font-size:14.5px;
+    color:#6b6255;
+    margin:0;
+    font-weight:500;
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
+    max-width:380px;
+    aspect-ratio:5/6.5;
+    margin-bottom:26px;
+  }
+  .card{
+    position:absolute;
+    inset:0;
+    background-color:#ffffff;
+    border:3px solid #2b2620;
+    border-radius:22px;
+    box-shadow:7px 7px 0 rgba(43,38,32,0.18);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:32px 30px;
+    transition:transform .18s ease, opacity .18s ease, background-color .2s ease;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    top:-40px; right:-40px;
+    width:120px; height:120px;
+    border-radius:50%;
+    background-color:rgba(255,255,255,0.15);
+  }
+  .card::after{
+    content:"";
+    position:absolute;
+    bottom:-30px; left:-30px;
+    width:90px; height:90px;
+    border-radius:50%;
+    background-color:rgba(255,255,255,0.1);
+  }
+  .card.deal-out{transform:translateY(-14px) rotate(-2deg); opacity:0;}
+  .card.deal-in{animation:dealIn .3s ease;}
+  @keyframes dealIn{
+    from{transform:translateY(16px) rotate(2deg) scale(.97); opacity:0;}
+    to{transform:translateY(0) rotate(0) scale(1); opacity:1;}
+  }
+  .card-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    border-radius:20px;
+    padding:5px 14px;
+    margin-bottom:24px;
+    font-weight:600;
+    background-color:rgba(255,255,255,0.28);
+    position:relative;
+    z-index:1;
+  }
+  .card-question{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:clamp(25px,6.8vw,31px);
+    line-height:1.32;
+    position:relative;
+    z-index:1;
+  }
+  .card.state-ready .card-tag{
+    background-color:rgba(43,38,32,0.08);
+    color:#8a8072;
+  }
+  .card.state-ready .card-question{color:#8a8072; font-family:'Quicksand',sans-serif; font-weight:600; font-size:17px;}
+
+  .controls{display:flex; gap:12px; margin-bottom:18px;}
+  button{
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:13px 26px;
+    border-radius:30px;
+    cursor:pointer;
+    border:3px solid #2b2620;
+    background-color:#ffd23f;
+    color:#2b2620;
+    box-shadow:4px 4px 0 rgba(43,38,32,0.18);
+    transition:transform .1s ease, box-shadow .1s ease;
+  }
+  button:active{transform:translate(2px,2px); box-shadow:2px 2px 0 rgba(43,38,32,0.18);}
+  button.secondary{
+    background-color:transparent;
+    color:#6b6255;
+    border-color:#d8cfbf;
+    box-shadow:none;
+    font-size:13px;
+    padding:10px 18px;
+    font-weight:600;
+  }
+  button.secondary:active{transform:none; box-shadow:none;}
+  button.nav{padding:13px 18px;}
+  button:disabled{opacity:.35; cursor:default;}
+
+  .progress-wrap{
+    width:100%;
+    max-width:280px;
+    margin-top:16px;
+    text-align:center;
+  }
+  .progress-track{
+    width:100%;
+    height:8px;
+    background-color:rgba(43,38,32,0.1);
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:8px;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg,#ff6b6b,#ffb703,#7c5cff,#06a77d,#ff5fa2);
+    border-radius:10px;
+    transition:width .3s ease;
+  }
+  .progress-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:#8a8072;
+  }
+  .progress-label b{color:#2b2620;}
+
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    max-width:340px;
+    margin-top:22px;
+  }
+  .legend-chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:5px 11px;
+    border-radius:20px;
+    color:#fff;
+  }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="eyebrow">Warm-up deck</div>
+  <h1>Разминка на 2 минуты</h1>
+  <p>Карточки идут строго по порядку — номер на карточке показывает, где вы остановились.</p>
+</div>
+
+<div class="stage">
+  <div class="card state-ready" id="card">
+    <div class="card-tag" id="cardTag">READY</div>
+    <div class="card-question" id="cardQuestion">Нажми «Начать колоду», чтобы открыть карточку №1</div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="secondary nav" id="prevBtn">← Назад</button>
+  <button id="drawBtn">🎴 Следующая карта</button>
+</div>
+<button class="secondary" id="resetBtn">Начать колоду заново</button>
+
+<div class="progress-wrap">
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label" id="progress">Пройдено <b>0</b> из <b>50</b> карт</div>
+</div>
+
+<div class="legend">
+  <span class="legend-chip" style="background-color:#ff6b6b;">Opinions</span>
+  <span class="legend-chip" style="background-color:#ffb703;">Memories</span>
+  <span class="legend-chip" style="background-color:#7c5cff;">Hypothetical</span>
+  <span class="legend-chip" style="background-color:#06a77d;">Preferences</span>
+  <span class="legend-chip" style="background-color:#ff5fa2;">Storytelling</span>
+</div>
+
+<script>
+const colors = {
+  "Opinions":     {bg:"#ff6b6b", text:"#ffffff"},
+  "Memories":     {bg:"#ffb703", text:"#2b2620"},
+  "Hypothetical": {bg:"#7c5cff", text:"#ffffff"},
+  "Preferences":  {bg:"#06a77d", text:"#ffffff"},
+  "Storytelling": {bg:"#ff5fa2", text:"#ffffff"}
+};
+
+const deck = [
+  {tag:"Opinions", q:"What's something most people love that you just don't get?"},
+  {tag:"Memories", q:"What's the last thing that made you laugh out loud?"},
+  {tag:"Hypothetical", q:"If you woke up fluent in one new language tomorrow, which would you pick?"},
+  {tag:"Preferences", q:"Would you rather always be 10 minutes early or never be rushed?"},
+  {tag:"Storytelling", q:"Tell me about the last time you got completely lost somewhere."},
+  {tag:"Opinions", q:"What's a rule you think should exist but doesn't?"},
+  {tag:"Memories", q:"What's a smell that instantly takes you back to your childhood?"},
+  {tag:"Hypothetical", q:"If you could have dinner with anyone, alive or not, who would it be?"},
+  {tag:"Preferences", q:"Mountains or ocean — and why?"},
+  {tag:"Storytelling", q:"What's the best piece of advice a stranger ever gave you?"},
+  {tag:"Opinions", q:"What's something you changed your mind about recently?"},
+  {tag:"Memories", q:"What's the first big trip you remember taking as a kid?"},
+  {tag:"Hypothetical", q:"If you had an extra free hour every day, what would you do with it?"},
+  {tag:"Preferences", q:"Do you plan everything or go with the flow?"},
+  {tag:"Storytelling", q:"Tell me about a time you surprised yourself."},
+  {tag:"Opinions", q:"What's a popular opinion you disagree with?"},
+  {tag:"Memories", q:"What's a gift you'll never forget receiving?"},
+  {tag:"Hypothetical", q:"If your life were a movie right now, what genre would it be?"},
+  {tag:"Preferences", q:"Would you rather read the book or watch the movie first?"},
+  {tag:"Storytelling", q:"What's the most spontaneous thing you've ever done?"},
+  {tag:"Opinions", q:"What's something people worry about too much?"},
+  {tag:"Memories", q:"What's a skill you were proud to finally learn?"},
+  {tag:"Hypothetical", q:"If you could instantly master one skill, what would it be?"},
+  {tag:"Preferences", q:"City life or countryside — which suits you more?"},
+  {tag:"Storytelling", q:"Tell me about someone who changed how you see things."},
+  {tag:"Opinions", q:"What's a trend you just don't understand?"},
+  {tag:"Memories", q:"What's the best meal you've ever had, and where?"},
+  {tag:"Hypothetical", q:"If you had to move to a new country tomorrow, where would you go?"},
+  {tag:"Preferences", q:"Would you rather have more time or more money right now?"},
+  {tag:"Storytelling", q:"What's a mistake that taught you something valuable?"},
+  {tag:"Opinions", q:"What's something you think is overrated?"},
+  {tag:"Memories", q:"What was your favorite subject at school, and why?"},
+  {tag:"Hypothetical", q:"If you could relive one day exactly as it happened, which day?"},
+  {tag:"Preferences", q:"Morning person or night owl?"},
+  {tag:"Storytelling", q:"Tell me about a time you had to make a quick decision."},
+  {tag:"Opinions", q:"What's a small thing that instantly improves your mood?"},
+  {tag:"Memories", q:"What's a tradition from your family you actually enjoy?"},
+  {tag:"Hypothetical", q:"If you won a trip anywhere in the world, where would you go first?"},
+  {tag:"Preferences", q:"Would you rather always know the ending or always be surprised?"},
+  {tag:"Storytelling", q:"What's the kindest thing a stranger has done for you?"},
+  {tag:"Opinions", q:"What's something you think everyone should try once?"},
+  {tag:"Memories", q:"What's a place you'd love to visit again?"},
+  {tag:"Hypothetical", q:"If you could send a message to yourself five years ago, what would it say?"},
+  {tag:"Preferences", q:"Would you rather work alone or as part of a team?"},
+  {tag:"Storytelling", q:"Tell me about a time plans fell apart but it turned out fine."},
+  {tag:"Opinions", q:"What's a habit you think more people should have?"},
+  {tag:"Memories", q:"What's something you were obsessed with as a kid?"},
+  {tag:"Hypothetical", q:"If you could swap lives with someone for a day, who would it be?"},
+  {tag:"Preferences", q:"Would you rather travel slowly through one place or see many places quickly?"},
+  {tag:"Storytelling", q:"What's a moment you felt genuinely proud of yourself?"}
+];
+
+const STORAGE_KEY = 'warmup-deck-position';
+
+// current = индекс показанной карточки; -1 = колода ещё не начата
+let current = -1;
+let ready = false; // пока не загрузили сохранённую позицию, кнопки заблокированы
+
+const cardEl = document.getElementById('card');
+const tagEl = document.getElementById('cardTag');
+const qEl = document.getElementById('cardQuestion');
+const progressEl = document.getElementById('progress');
+const progressFill = document.getElementById('progressFill');
+const drawBtn = document.getElementById('drawBtn');
+const prevBtn = document.getElementById('prevBtn');
+const resetBtn = document.getElementById('resetBtn');
+
+async function loadPosition(){
+  try{
+    const result = await window.storage.get(STORAGE_KEY, false);
+    const saved = result && result.value ? parseInt(result.value, 10) : -1;
+    current = Number.isInteger(saved) ? Math.min(Math.max(saved, -1), deck.length - 1) : -1;
+  }catch(e){
+    current = -1;
+  }
+  ready = true;
+  if(current >= 0) renderCard(false);
+  updateProgress();
+}
+
+async function savePosition(){
+  try{
+    await window.storage.set(STORAGE_KEY, String(current), false);
+  }catch(e){}
+}
+
+function updateProgress(){
+  const done = current + 1;
+  progressEl.innerHTML = `Пройдено <b>${done}</b> из <b>${deck.length}</b> карт`;
+  progressFill.style.width = (done / deck.length * 100) + '%';
+  prevBtn.disabled = !ready || current < 0;
+  drawBtn.disabled = !ready || current >= deck.length - 1;
+  drawBtn.textContent = current >= deck.length - 1
+    ? '🎉 Колода закончилась'
+    : (current < 0 ? '🎴 Начать колоду' : '🎴 Следующая карта');
+}
+
+function paintCard(){
+  const card = deck[current];
+  const palette = colors[card.tag];
+  cardEl.classList.remove('state-ready');
+  cardEl.style.backgroundColor = palette.bg;
+  cardEl.style.color = palette.text;
+  tagEl.textContent = `#${current + 1} · ${card.tag}`;
+  tagEl.style.color = palette.text;
+  qEl.textContent = card.q;
+  qEl.style.color = palette.text;
+}
+
+function renderCard(animate = true){
+  if(!animate){
+    paintCard();
+    return;
+  }
+  cardEl.classList.add('deal-out');
+  setTimeout(()=>{
+    paintCard();
+    cardEl.classList.remove('deal-out');
+    cardEl.classList.add('deal-in');
+    setTimeout(()=>cardEl.classList.remove('deal-in'), 320);
+  }, 160);
+}
+
+async function nextCard(){
+  if(current >= deck.length - 1) return;
+  current++;
+  await savePosition();
+  updateProgress();
+  renderCard();
+}
+
+async function prevCard(){
+  if(current < 0) return;
+  current--;
+  await savePosition();
+  updateProgress();
+  if(current < 0){
+    showReady('Колода в начале — жми «Начать колоду»');
+  }else{
+    renderCard();
+  }
+}
+
+function showReady(text){
+  cardEl.classList.add('state-ready');
+  cardEl.style.backgroundColor = '#ffffff';
+  cardEl.style.color = '';
+  tagEl.style.color = '';
+  qEl.style.color = '';
+  tagEl.textContent = 'READY';
+  qEl.textContent = text;
+}
+
+drawBtn.addEventListener('click', nextCard);
+prevBtn.addEventListener('click', prevCard);
+resetBtn.addEventListener('click', async ()=>{
+  current = -1;
+  await savePosition();
+  updateProgress();
+  showReady('Колода сброшена — начинаем с первой карточки');
+});
+
+loadPosition();
+</script>
+
+</body>
+</html>
